@@ -6,53 +6,54 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { providers } from 'ethers';
+import { providers, BigNumber} from 'ethers';
 
-const provider = new providers.JsonRpcProvider(process.env.PROVIDER_URL);
+const provider = new providers.JsonRpcProvider('https://eth-mainnet.alchemyapi.io/v2/_1_KrNiJBFo09hSX0gHXml4BZB8PTb_k');
 
 function createData(blockParameter, value) {
     return { blockParameter, value };
 }
 
 const initBlock = {
-   _difficulty: { BigNumber: "3849295379889" },
-   difficulty: 3849295379889,
-   extraData: '0x476574682f76312e302e312d39383130306634372f6c696e75782f676f312e34',
-   gasLimit: { BigNumber: "3141592" },
-   gasUsed: { BigNumber: "21000" },
-   hash: '0xf93283571ae16dcecbe1816adc126954a739350cd1523a1559eabeae155fbb63',
-   miner: '0x909755D480A27911cB7EeeB5edB918fae50883c0',
-   nonce: '0x1a455280001cc3f8',
-   number: 100004,
-   parentHash: '0x73d88d376f6b4d232d70dc950d9515fad3b5aa241937e362fdbfd74d1c901781',
-   timestamp: 1439799168,
-   transactions: [
-     '0x6f12399cc2cb42bed5b267899b08a847552e8c42a64f5eb128c1bcbd1974fb0c'
-   ]
+   _difficulty: {_hex: "0x0"},
+   difficulty: 0,
+   extraData: '0x0',
+   gasLimit: {_hex: "0x0"},
+   gasUsed: {_hex: "0x0"},
+   baseFeePerGas: {_hex: "0x0"},
+   hash: '0x0',
+   miner: '0x0',
+   nonce: '0x0',
+   number: 0,
+   parentHash: '0x0',
+   timestamp: 0,
+   transactions: 0
  }
 
 export default function Block() {
 
     let [block, setBlock] = React.useState(initBlock)
 
-    // React.useEffect(async () => {
-    //     setBlock(await provider.getBlock('latest'));
-    // },[])
+    React.useEffect(async () => {
+        let latestBlock = await provider.getBlock('latest');
+        setBlock(latestBlock);
+    },[])
 
 
 
     const rows = [
-        createData('difficulty', block.difficulty),
+        createData('number', block.number),
+        createData('difficulty', BigNumber.from(block._difficulty._hex).toString()),
         createData('extraData', block.extraData),
-        createData('gasLimit', block.gasLimit.BigNumber),
-        createData('gasUsed', block.gasUsed.BigNumber),
+        createData('gasLimit', BigNumber.from(block.gasLimit._hex).toString()),
+        createData('gasUsed', BigNumber.from(block.gasUsed._hex).toString()),
+        createData('baseFeePerGas', BigNumber.from(block.baseFeePerGas._hex).toString()),
         createData('hash', block.hash),
         createData('miner', block.miner),
         createData('nonce', block.nonce),
-        createData('number', block.number),
         createData('parentHash', block.parentHash),
         createData('timestamp', block.timestamp),
-        createData('transactions', block.transactions)
+        createData('Number of Transactions', block.transactions.length)
     ];
 
     return (
