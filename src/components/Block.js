@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { providers } from 'ethers';
 
-const provider = new providers.JsonRpcProvider('https://eth-mainnet.alchemyapi.io/v2/_1_KrNiJBFo09hSX0gHXml4BZB8PTb_k');
+const provider = new providers.JsonRpcProvider(process.env.PROVIDER_URL);
 
 function createData(blockParameter, value) {
     return { blockParameter, value };
